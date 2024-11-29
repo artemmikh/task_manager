@@ -1,5 +1,6 @@
 import json
 import os
+from pprint import pprint
 
 from configs import configure_argument_parser
 
@@ -28,23 +29,32 @@ class TaskManager:
         else:
             return []
 
-    def add_task(self, task):
-        self.tasks.append(task)
-        self.save_tasks()
-
     def save_tasks(self):
         with open(self.db, 'w', encoding='utf-8') as file:
             json.dump([task.to_dict() for task in self.tasks], file,
                       indent=2,
                       ensure_ascii=False)
 
+    def add_task(self, task):
+        self.tasks.append(task)
+        self.save_tasks()
+
+    def list_task(self):
+        if self.tasks is None:
+            print('Задачи не найдены')
+        else:
+            for task in self.tasks:
+                print(f'id – {task.id}, название – {task.title}')
+
 
 def main():
     arg_parser = configure_argument_parser()
     args = arg_parser.parse_args()
-    print(args)
     manager = TaskManager()
-    manager.add_task(Task(id=args.id, title=args.title))
+    if args.command == 'add':
+        manager.add_task(Task(id=args.id, title=args.title))
+    elif args.command == 'list':
+        manager.list_task()
 
 
 if __name__ == '__main__':
