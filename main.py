@@ -1,6 +1,5 @@
 import json
 import os
-from pprint import pprint
 
 from configs import configure_argument_parser
 
@@ -25,9 +24,11 @@ class TaskManager:
     def load_tasks(self):
         if os.path.exists(self.db):
             with open(self.db, 'r', encoding='utf-8') as file:
-                return [Task(**task) for task in json.load(file)]
-        else:
-            return []
+                try:
+                    return [Task(**task) for task in json.load(file)]
+                except json.JSONDecodeError:
+                    return []
+        return []
 
     def save_tasks(self):
         with open(self.db, 'w', encoding='utf-8') as file:
@@ -40,7 +41,7 @@ class TaskManager:
         self.save_tasks()
 
     def list_task(self):
-        if self.tasks is None:
+        if not self.tasks:
             print('Задачи не найдены')
         else:
             for task in self.tasks:
