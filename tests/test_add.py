@@ -17,9 +17,8 @@ def test_add_task(temp_db, monkeypatch):
     manager = TaskManager()
 
     assert len(manager.tasks) == 0
-    
-    new_task = Task(id=1, title="Test Task")
-    manager.add_task(new_task)
+
+    manager.add_task(title="Test Task")
 
     assert len(manager.tasks) == 1
     assert manager.tasks[0].id == 1

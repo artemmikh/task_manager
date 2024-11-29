@@ -37,7 +37,14 @@ class TaskManager:
                       indent=2,
                       ensure_ascii=False)
 
-    def add_task(self, task):
+    def add_task_id(self):
+        if not self.tasks:
+            return 1
+        else:
+            return max(task.id for task in self.tasks) + 1
+
+    def add_task(self, title):
+        task = Task(id=self.add_task_id(), title=title)
         self.tasks.append(task)
         self.save_tasks()
 
@@ -54,7 +61,7 @@ def main():
     args = arg_parser.parse_args()
     manager = TaskManager()
     if args.command == 'add':
-        manager.add_task(Task(id=args.id, title=args.title))
+        manager.add_task(title=args.title)
     elif args.command == 'list':
         manager.list_task()
 
