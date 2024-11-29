@@ -17,8 +17,9 @@ class Task:
 
 
 class TaskManager:
+    db = 'tasks.json'
+
     def __init__(self):
-        self.db = 'tasks.json'
         self.tasks = self.load_tasks()
 
     def load_tasks(self):
