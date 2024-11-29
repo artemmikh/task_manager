@@ -5,14 +5,25 @@ from configs import configure_argument_parser
 
 
 class Task:
-    def __init__(self, id, title):
+    def __init__(self, id, title, description, category, due_date, priority,
+                 status):
         self.id = id
         self.title = title
+        self.description = description
+        self.category = category
+        self.due_date = due_date
+        self.priority = priority
+        self.status = status
 
     def to_dict(self):
         return {
             "id": self.id,
-            "title": self.title
+            "title": self.title,
+            "description": self.description,
+            "category": self.category,
+            "due_date": self.due_date,
+            "priority": self.priority,
+            "status": self.status
         }
 
 
@@ -43,8 +54,17 @@ class TaskManager:
         else:
             return max(task.id for task in self.tasks) + 1
 
-    def add_task(self, title):
-        task = Task(id=self.add_task_id(), title=title)
+    def add_task(self, title, description, category,
+                 due_date, priority, status):
+        task = Task(
+            id=self.add_task_id(),
+            title=title,
+            description=description,
+            category=category,
+            due_date=due_date,
+            priority=priority,
+            status=status
+        )
         self.tasks.append(task)
         self.save_tasks()
 
@@ -53,7 +73,15 @@ class TaskManager:
             print('Задачи не найдены')
         else:
             for task in self.tasks:
-                print(f'id – {task.id}, название – {task.title}')
+                print(
+                    f'id – {task.id}, '
+                    f'название – {task.title}, '
+                    f'описание – {task.description}, '
+                    f'категория – {task.category}, '
+                    f'срок выполнения – {task.due_date}, '
+                    f'приоритет – {task.priority}, '
+                    f'статус – {task.status}, '
+                )
 
 
 def main():
@@ -61,7 +89,14 @@ def main():
     args = arg_parser.parse_args()
     manager = TaskManager()
     if args.command == 'add':
-        manager.add_task(title=args.title)
+        manager.add_task(
+            title=args.title,
+            description=args.description,
+            category=args.category,
+            due_date=args.due_date,
+            priority=args.priority,
+            status=args.status,
+        )
     elif args.command == 'list':
         manager.list_task()
 

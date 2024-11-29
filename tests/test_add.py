@@ -12,20 +12,33 @@ def temp_db():
     os.remove(tmp_file.name)
 
 
-def test_add_task(temp_db, monkeypatch):
+@pytest.fixture
+def data():
+    return {
+        'title': 'test',
+        'description': 'описание',
+        'category': 'отладка',
+        'due_date': '1234',
+        'priority': 'высокий',
+        'status': 'выполнена',
+    }
+
+
+def test_add_task(temp_db, monkeypatch, data):
     monkeypatch.setattr(TaskManager, 'db', temp_db)
     manager = TaskManager()
 
     assert len(manager.tasks) == 0
-
-    manager.add_task(title="Test Task")
-
+    manager.add_task(**data)
     assert len(manager.tasks) == 1
-    assert manager.tasks[0].id == 1
-    assert manager.tasks[0].title == "Test Task"
+
+    task = manager.tasks[0]
+    for key, value in data.items():
+        assert getattr(task, key) == value
 
     with open(temp_db, 'r', encoding='utf-8') as file:
-        data = json.load(file)
-        assert len(data) == 1
-        assert data[0]['id'] == 1
-        assert data[0]['title'] == "Test Task"
+        tasks = json.load(file)
+        assert len(tasks) == 1
+        data['id'] = 1
+        for key, value in tasks[0].items():
+            assert data.get(key) == value
