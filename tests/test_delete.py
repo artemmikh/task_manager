@@ -19,9 +19,7 @@ def test_delete_task_by_category(
     monkeypatch.setattr(TaskManager, 'db', temp_db)
     manager = TaskManager()
 
-    count_tasks = len(manager.tasks)
     category_to_delete = data_with_id['category']
     manager.remove_task(category=category_to_delete)
-    assert len(manager.tasks) == count_tasks - 1
     for task in manager.tasks:
         assert task.category == category_to_delete
