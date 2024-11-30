@@ -84,7 +84,16 @@ class TaskManager:
                 )
 
     def remove_task(self, id=None, category=None):
-        pass
+        if id is not None:
+            for task in self.tasks:
+                if task.id == id:
+                    self.tasks.remove(task)
+                    break
+        else:
+            for task in self.tasks:
+                if task.category == category:
+                    self.tasks.remove(task)
+        self.save_tasks()
 
 
 def main():
