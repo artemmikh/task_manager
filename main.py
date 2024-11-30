@@ -80,7 +80,7 @@ class TaskManager:
                     f'категория – {task.category}, '
                     f'срок выполнения – {task.due_date}, '
                     f'приоритет – {task.priority}, '
-                    f'статус – {task.status}, '
+                    f'статус – {task.status}'
                 )
 
 
