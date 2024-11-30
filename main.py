@@ -83,6 +83,9 @@ class TaskManager:
                     f'статус – {task.status}'
                 )
 
+    def remove_task(self, id=None, category=None):
+        pass
+
 
 def main():
     arg_parser = configure_argument_parser()
@@ -99,6 +102,8 @@ def main():
         )
     elif args.command == 'list':
         manager.list_task()
+    elif args.command == 'remove':
+        manager.remove_task(id=args.id, category=args.category)
 
 
 if __name__ == '__main__':

@@ -7,6 +7,15 @@ def configure_argument_parser():
         dest='command', required=True)
     list_parser = subparsers.add_parser(
         'list', help='Посмотреть список задач')
+    delete_parser = subparsers.add_parser('remove', help='Удаление задачи')
+    delete_group = delete_parser.add_mutually_exclusive_group(required=True)
+    delete_group.add_argument(
+        '--id',
+        type=int,
+        help='ID задачи для удаления')
+    delete_group.add_argument(
+        '--category',
+        help='Категория задач для удаления')
     add_parser = subparsers.add_parser(
         'add', help='Добавление задачи')
     add_parser.add_argument(
