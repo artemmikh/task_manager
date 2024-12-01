@@ -4,6 +4,8 @@ import pytest
 import os
 from tempfile import NamedTemporaryFile
 
+from main import TaskManager
+
 
 @pytest.fixture
 def data_no_id():
@@ -42,3 +44,10 @@ def populate_db(temp_db, data_with_id):
     with open(temp_db, 'w', encoding='utf-8') as file:
         json.dump([data_with_id], file, ensure_ascii=False, indent=2)
     return populate_db
+
+
+@pytest.fixture
+def task_manager(monkeypatch, temp_db):
+    monkeypatch.setattr(TaskManager, 'db', temp_db)
+    manager = TaskManager()
+    return manager

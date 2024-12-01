@@ -1,18 +1,11 @@
-from main import TaskManager
-
-
-def test_empty_list_task(temp_db, monkeypatch, capsys):
-    monkeypatch.setattr(TaskManager, 'db', temp_db)
-    manager = TaskManager()
-    manager.list_task()
+def test_empty_list_task(task_manager, capsys):
+    task_manager.list_task()
     output = capsys.readouterr()
     assert output.out.strip() == 'Задачи не найдены'
 
 
-def test_list_task(temp_db, monkeypatch, capsys, populate_db, data_with_id):
-    monkeypatch.setattr(TaskManager, 'db', temp_db)
-    manager = TaskManager()
-    manager.list_task()
+def test_list_task(capsys, populate_db, data_with_id, task_manager):
+    task_manager.list_task()
     output = capsys.readouterr()
     expected_output = (
         f'id – {data_with_id["id"]}, '

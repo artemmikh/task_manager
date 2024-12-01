@@ -1,17 +1,12 @@
 import json
 
-from main import TaskManager
 
+def test_add_task(temp_db, task_manager, data_no_id):
+    assert len(task_manager.tasks) == 0
+    task_manager.add_task(**data_no_id)
+    assert len(task_manager.tasks) == 1
 
-def test_add_task(temp_db, monkeypatch, data_no_id):
-    monkeypatch.setattr(TaskManager, 'db', temp_db)
-    manager = TaskManager()
-
-    assert len(manager.tasks) == 0
-    manager.add_task(**data_no_id)
-    assert len(manager.tasks) == 1
-
-    task = manager.tasks[0]
+    task = task_manager.tasks[0]
     for key, value in data_no_id.items():
         assert getattr(task, key) == value
 

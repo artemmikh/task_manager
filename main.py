@@ -95,6 +95,9 @@ class TaskManager:
                     self.tasks.remove(task)
         self.save_tasks()
 
+    def search_task(self):
+        pass
+
 
 def main():
     arg_parser = configure_argument_parser()
@@ -113,6 +116,8 @@ def main():
         manager.list_task()
     elif args.command == 'remove':
         manager.remove_task(id=args.id, category=args.category)
+    elif args.command == 'search':
+        print(args)
 
 
 if __name__ == '__main__':
