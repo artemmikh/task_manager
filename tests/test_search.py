@@ -19,7 +19,7 @@ def format_expected_output(tasks):
     [
         ({'keyword': 'ключевым'}, [0, 1]),
         ({'category': 'исследование'}, [1, 2]),
-        ({'status': 'исследование'}, [0, 2])
+        ({'status': 'выполнена'}, [0, 2])
     ]
 )
 def test_search_task(search_param, indexes, capsys, populate_db, task_manager,

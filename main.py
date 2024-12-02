@@ -96,7 +96,21 @@ class TaskManager:
         self.save_tasks()
 
     def search_task(self, keyword=None, category=None, status=None):
-        pass
+        temp_tasks = []
+        if keyword is not None:
+            for task in self.tasks:
+                if keyword in task.title or keyword in task.description:
+                    temp_tasks.append(task)
+        elif category is not None:
+            for task in self.tasks:
+                if category == task.category:
+                    temp_tasks.append(task)
+        else:
+            for task in self.tasks:
+                if task.status == status:
+                    temp_tasks.append(task)
+        self.tasks = temp_tasks
+        self.list_task()
 
 
 def main():
@@ -117,7 +131,6 @@ def main():
     elif args.command == 'remove':
         manager.remove_task(id=args.id, category=args.category)
     elif args.command == 'search':
-        print(args)
         manager.search_task(keyword=args.keyword, category=args.category,
                             status=args.status)
 
