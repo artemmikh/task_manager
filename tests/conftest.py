@@ -8,6 +8,23 @@ from main import TaskManager
 
 
 @pytest.fixture
+def formatted_output():
+    def formatter(tasks):
+        return '\n'.join(
+            f'id – {task["id"]}, '
+            f'название – {task["title"]}, '
+            f'описание – {task["description"]}, '
+            f'категория – {task["category"]}, '
+            f'срок выполнения – {task["due_date"]}, '
+            f'приоритет – {task["priority"]}, '
+            f'статус – {task["status"]}'
+            for task in tasks
+        )
+
+    return formatter
+
+
+@pytest.fixture
 def data_no_id():
     return {
         'title': 'test',

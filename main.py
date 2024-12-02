@@ -68,10 +68,10 @@ class TaskManager:
         self.tasks.append(task)
         self.save_tasks()
 
-    def list_task(self):
+    def list_task(self, all=False, category=None):
         if not self.tasks:
             print('Задачи не найдены')
-        else:
+        elif all:
             for task in self.tasks:
                 print(
                     f'id – {task.id}, '
@@ -82,6 +82,18 @@ class TaskManager:
                     f'приоритет – {task.priority}, '
                     f'статус – {task.status}'
                 )
+        else:
+            for task in self.tasks:
+                if task.category == category:
+                    print(
+                        f'id – {task.id}, '
+                        f'название – {task.title}, '
+                        f'описание – {task.description}, '
+                        f'категория – {task.category}, '
+                        f'срок выполнения – {task.due_date}, '
+                        f'приоритет – {task.priority}, '
+                        f'статус – {task.status}'
+                    )
 
     def remove_task(self, id=None, category=None):
         if id is not None:
@@ -110,7 +122,7 @@ class TaskManager:
                 if task.status == status:
                     temp_tasks.append(task)
         self.tasks = temp_tasks
-        self.list_task()
+        self.list_task(all=True)
 
 
 def main():
@@ -127,7 +139,7 @@ def main():
             status=args.status,
         )
     elif args.command == 'list':
-        manager.list_task()
+        manager.list_task(all=args.all, category=args.category)
     elif args.command == 'remove':
         manager.remove_task(id=args.id, category=args.category)
     elif args.command == 'search':
