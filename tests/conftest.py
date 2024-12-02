@@ -25,7 +25,7 @@ def data_with_id():
         {
             'id': 1,
             'title': 'test',
-            'description': 'описание',
+            'description': 'описание для поиска по ключевым словам',
             'category': 'отладка',
             'due_date': '1234',
             'priority': 'высокий',
@@ -34,8 +34,8 @@ def data_with_id():
         {
             'id': 2,
             'title': 'test2',
-            'description': 'описание 2',
-            'category': 'разработка',
+            'description': 'описание для поиска по ключевым словам 2',
+            'category': 'исследование',
             'due_date': '5678',
             'priority': 'средний',
             'status': 'не выполнена',

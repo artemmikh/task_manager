@@ -1,15 +1,30 @@
-def test_search_task_by_keyword(capsys, populate_db, task_manager, temp_db,
-                                data_with_id):
-    task_to_search = data_with_id[0]
-    task_manager.search_task(keyword=task_to_search["title"])
-    output = capsys.readouterr()
-    expected_output = (
-        f'id – {task_to_search["id"]}, '
-        f'название – {task_to_search["title"]}, '
-        f'описание – {task_to_search["description"]}, '
-        f'категория – {task_to_search["category"]}, '
-        f'срок выполнения – {task_to_search["due_date"]}, '
-        f'приоритет – {task_to_search["priority"]}, '
-        f'статус – {task_to_search["status"]}'
+import pytest
+
+
+def format_expected_output(tasks):
+    return '\n'.join(
+        f'id – {task["id"]}, '
+        f'название – {task["title"]}, '
+        f'описание – {task["description"]}, '
+        f'категория – {task["category"]}, '
+        f'срок выполнения – {task["due_date"]}, '
+        f'приоритет – {task["priority"]}, '
+        f'статус – {task["status"]}'
+        for task in tasks
     )
+
+
+@pytest.mark.parametrize(
+    'search_param, indexes',
+    [
+        ({'keyword': 'ключевым'}, [0, 1]),
+        ({'category': 'исследование'}, [1, 2]),
+        ({'status': 'исследование'}, [0, 2])
+    ]
+)
+def test_search_task(search_param, indexes, capsys, populate_db, task_manager,
+                     data_with_id):
+    task_manager.search_task(**search_param)
+    output = capsys.readouterr()
+    expected_output = format_expected_output(data_with_id[i] for i in indexes)
     assert output.out.strip() == expected_output
