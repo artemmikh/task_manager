@@ -7,13 +7,16 @@ def test_empty_list_task(task_manager, capsys):
 def test_list_task(capsys, populate_db, data_with_id, task_manager):
     task_manager.list_task()
     output = capsys.readouterr()
-    expected_output = (
-        f'id – {data_with_id["id"]}, '
-        f'название – {data_with_id["title"]}, '
-        f'описание – {data_with_id["description"]}, '
-        f'категория – {data_with_id["category"]}, '
-        f'срок выполнения – {data_with_id["due_date"]}, '
-        f'приоритет – {data_with_id["priority"]}, '
-        f'статус – {data_with_id["status"]}'
-    )
+    expected_output = "\n".join([
+        (
+            f'id – {task["id"]}, '
+            f'название – {task["title"]}, '
+            f'описание – {task["description"]}, '
+            f'категория – {task["category"]}, '
+            f'срок выполнения – {task["due_date"]}, '
+            f'приоритет – {task["priority"]}, '
+            f'статус – {task["status"]}'
+        )
+        for task in data_with_id
+    ])
     assert output.out.strip() == expected_output
