@@ -95,7 +95,7 @@ class TaskManager:
                     self.tasks.remove(task)
         self.save_tasks()
 
-    def search_task(self):
+    def search_task(self, keyword=None, category=None, status=None):
         pass
 
 
@@ -118,6 +118,8 @@ def main():
         manager.remove_task(id=args.id, category=args.category)
     elif args.command == 'search':
         print(args)
+        manager.search_task(keyword=args.keyword, category=args.category,
+                            status=args.status)
 
 
 if __name__ == '__main__':

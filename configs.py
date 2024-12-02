@@ -16,6 +16,20 @@ def configure_argument_parser():
     delete_group.add_argument(
         '--category',
         help='Категория задач для удаления')
+    search_parser = subparsers.add_parser('search', help='Поиск задачи')
+    search_group = search_parser.add_mutually_exclusive_group(required=True)
+    search_group.add_argument(
+        '-kw',
+        '--keyword',
+        help='ключевое слово для поиска задачи')
+    search_group.add_argument(
+        '-c',
+        '--category',
+        help='категория задачи для поиска')
+    search_group.add_argument(
+        '-s',
+        '--status',
+        help='статус задачи для поиска')
     add_parser = subparsers.add_parser(
         'add', help='Добавление задачи')
     add_parser.add_argument(
