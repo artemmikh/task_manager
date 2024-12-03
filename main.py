@@ -67,19 +67,19 @@ class TaskManager:
             for task in tasks
         )
 
+    def validate_task(self, task):
+        if task.due_date is not None:
+            try:
+                time.strptime(task.due_date, "%Y-%m-%d")
+            except ValueError:
+                print('Ошибка. Пожалуйста, используйте формат даты '
+                      'год-месяц-день, например '
+                      f'"{time.strftime("%Y-%m-%d", time.localtime())}". ')
+                return
+        return task
+
     def add_task(self, title, description, category,
                  due_date, priority, status):
-        try:
-            time.strptime(due_date, "%Y-%m-%d")
-            if time.strftime("%Y-%m-%d", time.localtime()) > due_date:
-                raise ValueError
-        except ValueError:
-            print('Ошибка. Пожалуйста, используйте формат даты '
-                  'год-месяц-день, например '
-                  f'"{time.strftime("%Y-%m-%d", time.localtime())}". '
-                  'Дата не может быть меньше текущей '
-                  'даты')
-            return
         task = Task(
             id=self.add_task_id(),
             title=title,
@@ -89,6 +89,7 @@ class TaskManager:
             priority=priority,
             status=status
         )
+        task = self.validate_task(task)
         self.tasks.append(task)
         self.save_tasks()
 
@@ -124,7 +125,7 @@ class TaskManager:
             for task in self.tasks:
                 if category == task.category:
                     temp_tasks.append(task)
-        else:
+        elif status is not None:
             for task in self.tasks:
                 if task.status == status:
                     temp_tasks.append(task)
@@ -138,8 +139,9 @@ class TaskManager:
             print('Задача с этим ID не найдена')
             return
         for key, value in kwargs.items():
-            if hasattr(task_to_edit, key):
+            if value is not None and hasattr(task_to_edit, key):
                 setattr(task_to_edit, key, value)
+        self.validate_task(task_to_edit)
         self.save_tasks()
 
 
