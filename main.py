@@ -1,11 +1,13 @@
+from argparse import Namespace
 from configs import configure_argument_parser
 from task_manager import TaskManager
 
 
-def main():
+def main() -> None:
     arg_parser = configure_argument_parser()
-    args = arg_parser.parse_args()
-    manager = TaskManager()
+    args: Namespace = arg_parser.parse_args()
+    manager: TaskManager = TaskManager()
+
     if args.command == 'add':
         manager.add_task(
             title=args.title,
