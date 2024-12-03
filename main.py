@@ -74,7 +74,7 @@ class TaskManager:
             except ValueError:
                 print('Ошибка. Пожалуйста, используйте формат даты '
                       'год-месяц-день, например '
-                      f'"{time.strftime("%Y-%m-%d", time.localtime())}". ')
+                      f'"{time.strftime("%Y-%m-%d", time.localtime())}"')
                 return
         return task
 
@@ -92,27 +92,34 @@ class TaskManager:
         task = self.validate_task(task)
         self.tasks.append(task)
         self.save_tasks()
+        print(f'Задача добавлена. ID задачи {task.id}')
 
     def list_task(self, all=False, category=None):
         if not self.tasks:
             print('Задачи не найдены')
         elif all:
             print(self.get_output_format(self.tasks))
-        else:
+        elif category is not None:
+            find_category = False
             for task in self.tasks:
                 if task.category == category:
                     print(self.get_output_format([task]))
+                    find_category = True
+            if not find_category:
+                print(f'Нет задач в категории "{category}"')
 
     def remove_task(self, id=None, category=None):
         if id is not None:
             for task in self.tasks:
                 if task.id == id:
                     self.tasks.remove(task)
+                    print(f'Задача с ID "{id}" удалена')
                     break
         else:
             for task in self.tasks:
                 if task.category == category:
                     self.tasks.remove(task)
+            print(f'Все задачи с категорией "{category}" удалены')
         self.save_tasks()
 
     def search_task(self, keyword=None, category=None, status=None):
@@ -121,14 +128,20 @@ class TaskManager:
             for task in self.tasks:
                 if keyword in task.title or keyword in task.description:
                     temp_tasks.append(task)
+                if not temp_tasks:
+                    print(f'Задачи с ключевым словом {keyword} не найдены')
         elif category is not None:
             for task in self.tasks:
                 if category == task.category:
                     temp_tasks.append(task)
+                if not temp_tasks:
+                    print(f'Задачи с категорией {category} не найдены')
         elif status is not None:
             for task in self.tasks:
                 if task.status == status:
                     temp_tasks.append(task)
+                if not temp_tasks:
+                    print(f'Задачи с статусом {status} не найдены')
         self.tasks = temp_tasks
         self.list_task(all=True)
 
@@ -143,6 +156,7 @@ class TaskManager:
                 setattr(task_to_edit, key, value)
         self.validate_task(task_to_edit)
         self.save_tasks()
+        print('Задача изменена')
 
 
 def main():
