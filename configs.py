@@ -2,6 +2,27 @@ import argparse
 
 
 def configure_argument_parser():
+    def add_edit_arguments(parser):
+        parser.add_argument(
+            '--id', type=int, required=True,
+            help='ID задачи для редактирования'
+        )
+        parser.add_argument('-t', '--title', help='Новое название задачи')
+        parser.add_argument('-d', '--description',
+                            help='Новое описание задачи')
+        parser.add_argument('-c', '--category', help='Новая категория задачи')
+        parser.add_argument(
+            '-dt', '--due_date', help='Новый срок выполнения задачи'
+        )
+        parser.add_argument(
+            '-p', '--priority', help='Новый приоритет задачи',
+            choices=['низкий', 'средний', 'высокий']
+        )
+        parser.add_argument(
+            '-s', '--status', help='Новый статус задачи',
+            choices=['выполнена', 'не выполнена']
+        )
+
     def add_list_arguments(parser):
         group = parser.add_mutually_exclusive_group(required=True)
         group.add_argument(
@@ -54,5 +75,7 @@ def configure_argument_parser():
     add_search_arguments(search_parser)
     remove_parser = subparsers.add_parser('remove', help='Удаление задачи')
     add_remove_arguments(remove_parser)
+    edit_parser = subparsers.add_parser('edit', help='Изменение задачи')
+    add_edit_arguments(edit_parser)
 
     return parser
