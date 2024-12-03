@@ -1,7 +1,6 @@
 import json
 import os
 import time
-from datetime import datetime
 
 from configs import configure_argument_parser
 
@@ -64,8 +63,9 @@ class TaskManager:
                 raise ValueError
         except ValueError:
             print('Ошибка. Пожалуйста, используйте формат даты '
-                  'год-месяц-день, '
-                  'например "2024-11-30". Дата не может быть меньше текущей '
+                  'год-месяц-день, например '
+                  f'"{time.strftime("%Y-%m-%d", time.localtime())}". '
+                  'Дата не может быть меньше текущей '
                   'даты')
             return
         task = Task(

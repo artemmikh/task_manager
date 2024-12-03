@@ -1,8 +1,9 @@
 import json
+import os
+import time
+from tempfile import NamedTemporaryFile
 
 import pytest
-import os
-from tempfile import NamedTemporaryFile
 
 from main import TaskManager
 
@@ -30,7 +31,7 @@ def data_no_id():
         'title': 'test',
         'description': 'описание',
         'category': 'отладка',
-        'due_date': '1234',
+        'due_date': f'{time.strftime("%Y-%m-%d", time.localtime())}',
         'priority': 'высокий',
         'status': 'выполнена',
     }
