@@ -128,20 +128,20 @@ class TaskManager:
             for task in self.tasks:
                 if keyword in task.title or keyword in task.description:
                     temp_tasks.append(task)
-                if not temp_tasks:
-                    print(f'Задачи с ключевым словом {keyword} не найдены')
+            if not temp_tasks:
+                print(f'Задачи с ключевым словом {keyword} не найдены')
         elif category is not None:
             for task in self.tasks:
                 if category == task.category:
                     temp_tasks.append(task)
-                if not temp_tasks:
-                    print(f'Задачи с категорией {category} не найдены')
+            if not temp_tasks:
+                print(f'Задачи с категорией {category} не найдены')
         elif status is not None:
             for task in self.tasks:
                 if task.status == status:
                     temp_tasks.append(task)
-                if not temp_tasks:
-                    print(f'Задачи с статусом {status} не найдены')
+            if not temp_tasks:
+                print(f'Задачи с статусом {status} не найдены')
         self.tasks = temp_tasks
         self.list_task(all=True)
 
