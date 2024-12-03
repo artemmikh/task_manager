@@ -136,8 +136,16 @@ class TaskManager:
         self.tasks = temp_tasks
         self.list_task(all=True)
 
-    def edit_task(self):
-        pass
+    def edit_task(self, id, **kwargs):
+        try:
+            task_to_edit = next(task for task in self.tasks if task.id == id)
+        except StopIteration:
+            print('Задача с этим ID не найдена')
+            return
+        for key, value in kwargs.items():
+            if hasattr(task_to_edit, key):
+                setattr(task_to_edit, key, value)
+        self.save_tasks()
 
 
 def main():
@@ -160,6 +168,16 @@ def main():
     elif args.command == 'search':
         manager.search_task(keyword=args.keyword, category=args.category,
                             status=args.status)
+    elif args.command == 'edit':
+        manager.edit_task(
+            id=args.id,
+            title=args.title,
+            description=args.description,
+            category=args.category,
+            due_date=args.due_date,
+            priority=args.priority,
+            status=args.status,
+        )
 
 
 if __name__ == '__main__':
