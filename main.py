@@ -136,6 +136,9 @@ class TaskManager:
         self.tasks = temp_tasks
         self.list_task(all=True)
 
+    def edit_task(self):
+        pass
+
 
 def main():
     arg_parser = configure_argument_parser()
