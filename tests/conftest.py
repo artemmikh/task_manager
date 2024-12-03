@@ -5,7 +5,7 @@ from tempfile import NamedTemporaryFile
 
 import pytest
 
-from main import TaskManager
+from task_manager import TaskManager
 
 TODAY = time.strftime("%Y-%m-%d", time.localtime())
 
