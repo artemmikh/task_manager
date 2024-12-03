@@ -7,6 +7,8 @@ import pytest
 
 from main import TaskManager
 
+TODAY = time.strftime("%Y-%m-%d", time.localtime())
+
 
 @pytest.fixture
 def formatted_output():
@@ -31,7 +33,7 @@ def data_no_id():
         'title': 'test',
         'description': 'описание',
         'category': 'отладка',
-        'due_date': f'{time.strftime("%Y-%m-%d", time.localtime())}',
+        'due_date': f'{TODAY}',
         'priority': 'высокий',
         'status': 'выполнена',
     }
@@ -45,7 +47,7 @@ def data_with_id():
             'title': 'test',
             'description': 'описание для поиска по ключевым словам',
             'category': 'отладка',
-            'due_date': '1234',
+            'due_date': f'{TODAY}',
             'priority': 'высокий',
             'status': 'выполнена',
         },
@@ -54,7 +56,7 @@ def data_with_id():
             'title': 'test2',
             'description': 'описание для поиска по ключевым словам 2',
             'category': 'исследование',
-            'due_date': '5678',
+            'due_date': f'{TODAY}',
             'priority': 'средний',
             'status': 'не выполнена',
         },
@@ -63,7 +65,7 @@ def data_with_id():
             'title': 'test3',
             'description': 'описание 3',
             'category': 'исследование',
-            'due_date': '91011',
+            'due_date': f'{TODAY}',
             'priority': 'низкий',
             'status': 'выполнена',
         }
