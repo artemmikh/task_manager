@@ -2,6 +2,7 @@ import json
 import os
 import time
 from tempfile import NamedTemporaryFile
+from typing import Dict, List, Union
 
 import pytest
 
@@ -11,8 +12,8 @@ TODAY = time.strftime("%Y-%m-%d", time.localtime())
 
 
 @pytest.fixture
-def formatted_output():
-    def formatter(tasks):
+def formatted_output() -> str:
+    def formatter(tasks: List[Dict[str, Union[str, int]]]) -> str:
         return '\n'.join(
             f'id – {task["id"]}, '
             f'название – {task["title"]}, '
@@ -28,7 +29,7 @@ def formatted_output():
 
 
 @pytest.fixture
-def data_no_id():
+def data_no_id() -> Dict[str, str]:
     return {
         'title': 'test',
         'description': 'описание',
@@ -40,7 +41,7 @@ def data_no_id():
 
 
 @pytest.fixture
-def data_with_id():
+def data_with_id() -> List[Dict[str, str]]:
     return [
         {
             'id': 1,
@@ -73,21 +74,20 @@ def data_with_id():
 
 
 @pytest.fixture
-def temp_db():
+def temp_db() -> str:
     with NamedTemporaryFile(delete=False, suffix='.json') as tmp_file:
         yield tmp_file.name
     os.remove(tmp_file.name)
 
 
 @pytest.fixture
-def populate_db(temp_db, data_with_id):
+def populate_db(temp_db: str, data_with_id: List[Dict[str, str]]) -> None:
     with open(temp_db, 'w', encoding='utf-8') as file:
         json.dump(data_with_id, file, ensure_ascii=False, indent=2)
-    return populate_db
 
 
 @pytest.fixture
-def task_manager(monkeypatch, temp_db):
+def task_manager(monkeypatch, temp_db: str) -> TaskManager:
     monkeypatch.setattr(TaskManager, 'db', temp_db)
     manager = TaskManager()
     return manager
