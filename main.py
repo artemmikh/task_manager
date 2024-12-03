@@ -1,5 +1,7 @@
 import json
 import os
+import time
+from datetime import datetime
 
 from configs import configure_argument_parser
 
@@ -56,6 +58,16 @@ class TaskManager:
 
     def add_task(self, title, description, category,
                  due_date, priority, status):
+        try:
+            time.strptime(due_date, "%Y-%m-%d")
+            if time.strftime("%Y-%m-%d", time.localtime()) > due_date:
+                raise ValueError
+        except ValueError:
+            print('Ошибка. Пожалуйста, используйте формат даты '
+                  'год-месяц-день, '
+                  'например "2024-11-30". Дата не может быть меньше текущей '
+                  'даты')
+            return
         task = Task(
             id=self.add_task_id(),
             title=title,
