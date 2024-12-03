@@ -1,3 +1,4 @@
+from typing import List, Optional, Union
 import json
 import os
 import time
@@ -6,12 +7,12 @@ from task import Task
 
 
 class TaskManager:
-    db = 'tasks.json'
+    db: str = 'tasks.json'
 
-    def __init__(self):
-        self.tasks = self.load_tasks()
+    def __init__(self) -> None:
+        self.tasks: List[Task] = self.load_tasks()
 
-    def load_tasks(self):
+    def load_tasks(self) -> List[Task]:
         if os.path.exists(self.db):
             with open(self.db, 'r', encoding='utf-8') as file:
                 try:
@@ -20,19 +21,19 @@ class TaskManager:
                     return []
         return []
 
-    def save_tasks(self):
+    def save_tasks(self) -> None:
         with open(self.db, 'w', encoding='utf-8') as file:
             json.dump([task.to_dict() for task in self.tasks], file,
                       indent=2,
                       ensure_ascii=False)
 
-    def add_task_id(self):
+    def add_task_id(self) -> int:
         if not self.tasks:
             return 1
         else:
             return max(task.id for task in self.tasks) + 1
 
-    def get_output_format(self, tasks):
+    def get_output_format(self, tasks: List[Task]) -> str:
         return '\n'.join(
             f'id – {task.id}, '
             f'название – {task.title}, '
@@ -44,7 +45,7 @@ class TaskManager:
             for task in tasks
         )
 
-    def validate_task(self, task):
+    def validate_task(self, task: Task) -> Optional[Task]:
         if task.due_date is not None:
             try:
                 time.strptime(task.due_date, "%Y-%m-%d")
@@ -52,11 +53,19 @@ class TaskManager:
                 print('Ошибка. Пожалуйста, используйте формат даты '
                       'год-месяц-день, например '
                       f'"{time.strftime("%Y-%m-%d", time.localtime())}"')
-                return
+                # TODO обработка none
+                return None
         return task
 
-    def add_task(self, title, description, category,
-                 due_date, priority, status):
+    def add_task(
+            self,
+            title: str,
+            description: str,
+            category: str,
+            due_date: str,
+            priority: str,
+            status: str
+    ) -> None:
         task = Task(
             id=self.add_task_id(),
             title=title,
@@ -67,11 +76,13 @@ class TaskManager:
             status=status
         )
         task = self.validate_task(task)
-        self.tasks.append(task)
-        self.save_tasks()
-        print(f'Задача добавлена. ID задачи {task.id}')
+        if task:
+            self.tasks.append(task)
+            self.save_tasks()
+            print(f'Задача добавлена. ID задачи {task.id}')
 
-    def list_task(self, all=False, category=None):
+    def list_task(self, all: bool = False,
+                  category: Optional[str] = None) -> None:
         if not self.tasks:
             print('Задачи не найдены')
         elif all:
@@ -85,22 +96,28 @@ class TaskManager:
             if not find_category:
                 print(f'Нет задач в категории "{category}"')
 
-    def remove_task(self, id=None, category=None):
+    def remove_task(self, id: Optional[int] = None,
+                    category: Optional[str] = None) -> None:
         if id is not None:
             for task in self.tasks:
                 if task.id == id:
                     self.tasks.remove(task)
                     print(f'Задача с ID "{id}" удалена')
                     break
-        else:
+        elif category is not None:
             for task in self.tasks:
                 if task.category == category:
                     self.tasks.remove(task)
             print(f'Все задачи с категорией "{category}" удалены')
         self.save_tasks()
 
-    def search_task(self, keyword=None, category=None, status=None):
-        temp_tasks = []
+    def search_task(
+            self,
+            keyword: Optional[str] = None,
+            category: Optional[str] = None,
+            status: Optional[str] = None
+    ) -> None:
+        temp_tasks: List[Task] = []
         if keyword is not None:
             for task in self.tasks:
                 if keyword in task.title or keyword in task.description:
@@ -122,9 +139,10 @@ class TaskManager:
         self.tasks = temp_tasks
         self.list_task(all=True)
 
-    def edit_task(self, id, **kwargs):
+    def edit_task(self, id: int, **kwargs: Union[str, None]) -> None:
         try:
-            task_to_edit = next(task for task in self.tasks if task.id == id)
+            task_to_edit: Task = next(
+                task for task in self.tasks if task.id == id)
         except StopIteration:
             print('Задача с этим ID не найдена')
             return
