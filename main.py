@@ -55,6 +55,18 @@ class TaskManager:
         else:
             return max(task.id for task in self.tasks) + 1
 
+    def get_output_format(self, tasks):
+        return '\n'.join(
+            f'id – {task.id}, '
+            f'название – {task.title}, '
+            f'описание – {task.description}, '
+            f'категория – {task.category}, '
+            f'срок выполнения – {task.due_date}, '
+            f'приоритет – {task.priority}, '
+            f'статус – {task.status}'
+            for task in tasks
+        )
+
     def add_task(self, title, description, category,
                  due_date, priority, status):
         try:
@@ -84,28 +96,11 @@ class TaskManager:
         if not self.tasks:
             print('Задачи не найдены')
         elif all:
-            for task in self.tasks:
-                print(
-                    f'id – {task.id}, '
-                    f'название – {task.title}, '
-                    f'описание – {task.description}, '
-                    f'категория – {task.category}, '
-                    f'срок выполнения – {task.due_date}, '
-                    f'приоритет – {task.priority}, '
-                    f'статус – {task.status}'
-                )
+            print(self.get_output_format(self.tasks))
         else:
             for task in self.tasks:
                 if task.category == category:
-                    print(
-                        f'id – {task.id}, '
-                        f'название – {task.title}, '
-                        f'описание – {task.description}, '
-                        f'категория – {task.category}, '
-                        f'срок выполнения – {task.due_date}, '
-                        f'приоритет – {task.priority}, '
-                        f'статус – {task.status}'
-                    )
+                    print(self.get_output_format([task]))
 
     def remove_task(self, id=None, category=None):
         if id is not None:
