@@ -1,11 +1,20 @@
-def test_empty_list_task(task_manager, capsys):
+from typing import List, Dict, Union
+import pytest
+from task_manager import TaskManager
+
+
+def test_empty_list_task(
+        task_manager: TaskManager, capsys: pytest.CaptureFixture) -> None:
     task_manager.list_task()
     output = capsys.readouterr()
     assert output.out.strip() == 'Задачи не найдены'
 
 
 def test_list_all_task(
-        capsys, populate_db, data_with_id, task_manager, formatted_output):
+        capsys: pytest.CaptureFixture, populate_db: None,
+        data_with_id: List[Dict[str, Union[str, int]]], task_manager:
+        TaskManager,
+        formatted_output: callable) -> None:
     task_manager.list_task(all=True)
     output = capsys.readouterr()
     expected_output = formatted_output(data_with_id)
@@ -13,7 +22,10 @@ def test_list_all_task(
 
 
 def test_list_task_by_category(
-        capsys, populate_db, data_with_id, task_manager, formatted_output):
+        capsys: pytest.CaptureFixture, populate_db: None,
+        data_with_id: List[Dict[str, Union[str, int]]],
+        task_manager: TaskManager,
+        formatted_output: callable) -> None:
     task_manager.list_task(category='исследование')
     output = capsys.readouterr()
     expected_output = formatted_output([data_with_id[1], data_with_id[2]])

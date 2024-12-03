@@ -41,7 +41,7 @@ def data_no_id() -> Dict[str, str]:
 
 
 @pytest.fixture
-def data_with_id() -> List[Dict[str, str]]:
+def data_with_id() -> List[Dict[str, Union[str, int]]]:
     return [
         {
             'id': 1,
