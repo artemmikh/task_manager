@@ -19,6 +19,7 @@ def test_search_task(
         populate_db: None, task_manager: TaskManager,
         data_with_id: List[Dict[str, str]],
         formatted_output: callable) -> None:
+    """Тестирует поиск задач по ключевому слову, категории или статусу."""
     task_manager.search_task(**search_param)
     output = capsys.readouterr()
     expected_output = formatted_output([data_with_id[i] for i in indexes])

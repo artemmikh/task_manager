@@ -17,6 +17,7 @@ from task_manager import TaskManager
 def test_edit_task(
         edit_param: Dict[str, str], task_id: int,
         populate_db: None, task_manager: TaskManager) -> None:
+    """Тестирует изменение задачи."""
     task_manager.edit_task(task_id, **edit_param)
     with open(task_manager.db, 'r', encoding='utf-8') as file:
         tasks = json.load(file)
@@ -34,6 +35,7 @@ def test_edit_task(
 def test_edit_task_invalid_id(
         edit_param: Dict[str, str], task_id: int,
         task_manager: TaskManager, capsys: pytest.CaptureFixture) -> None:
+    """Тестирует изменение задачи с несуществующим ID."""
     task_manager.edit_task(task_id, **edit_param)
     output = capsys.readouterr()
     assert output.out.strip() == 'Задача с этим ID не найдена'
