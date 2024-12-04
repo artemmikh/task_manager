@@ -7,12 +7,17 @@ from task import Task
 
 
 class TaskManager:
+    """Класс для управления задачами. Обеспечивает операции добавления,
+    редактирования, удаления, поиска и отображения задач."""
+
     db: str = 'tasks.json'
 
     def __init__(self) -> None:
+        """Инициализирует менеджер задач, загружая задачи из файла."""
         self.tasks: List[Task] = self.load_tasks()
 
     def load_tasks(self) -> List[Task]:
+        """Загружает задачи из файла базы данных."""
         if os.path.exists(self.db):
             with open(self.db, 'r', encoding='utf-8') as file:
                 try:
@@ -22,18 +27,21 @@ class TaskManager:
         return []
 
     def save_tasks(self) -> None:
+        """Сохраняет текущие задачи в файл базы данных."""
         with open(self.db, 'w', encoding='utf-8') as file:
             json.dump([task.to_dict() for task in self.tasks], file,
                       indent=2,
                       ensure_ascii=False)
 
     def add_task_id(self) -> int:
+        """Генерирует уникальный идентификатор для новой задачи."""
         if not self.tasks:
             return 1
         else:
             return max(task.id for task in self.tasks) + 1
 
     def get_output_format(self, tasks: List[Task]) -> str:
+        """Форматирует список задач для вывода."""
         return '\n'.join(
             f'id – {task.id}, '
             f'название – {task.title}, '
@@ -46,6 +54,7 @@ class TaskManager:
         )
 
     def validate_task(self, task: Task) -> Optional[Task]:
+        """Валидирует задачу, проверяя корректность даты выполнения."""
         if task.due_date is not None:
             try:
                 time.strptime(task.due_date, "%Y-%m-%d")
@@ -65,6 +74,7 @@ class TaskManager:
             priority: str,
             status: str
     ) -> None:
+        """Добавляет новую задачу."""
         task = Task(
             id=self.add_task_id(),
             title=title,
@@ -82,6 +92,7 @@ class TaskManager:
 
     def list_task(self, all: bool = False,
                   category: Optional[str] = None) -> None:
+        """Отображает список всех задач или по категории."""
         if not self.tasks:
             print('Задачи не найдены')
         elif all:
@@ -97,6 +108,7 @@ class TaskManager:
 
     def remove_task(self, id: Optional[int] = None,
                     category: Optional[str] = None) -> None:
+        """Удаляет задачи по ID или категории."""
         if id is not None:
             for task in self.tasks:
                 if task.id == id:
@@ -116,6 +128,7 @@ class TaskManager:
             category: Optional[str] = None,
             status: Optional[str] = None
     ) -> None:
+        """Ищет задачи по ключевому слову, категории или статусу."""
         temp_tasks: List[Task] = []
         if keyword is not None:
             for task in self.tasks:
@@ -139,6 +152,7 @@ class TaskManager:
         self.list_task(all=True)
 
     def edit_task(self, id: int, **kwargs: Union[str, None]) -> None:
+        """Редактирует задачу по ID."""
         try:
             task_to_edit: Task = next(
                 task for task in self.tasks if task.id == id)
