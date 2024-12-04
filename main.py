@@ -1,4 +1,5 @@
 from argparse import Namespace
+
 from configs import configure_argument_parser
 from task_manager import TaskManager
 

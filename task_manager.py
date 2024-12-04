@@ -1,7 +1,7 @@
-from typing import List, Optional, Union
 import json
 import os
 import time
+from typing import List, Optional, Union
 
 from task import Task
 
