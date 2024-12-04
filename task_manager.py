@@ -53,7 +53,6 @@ class TaskManager:
                 print('Ошибка. Пожалуйста, используйте формат даты '
                       'год-месяц-день, например '
                       f'"{time.strftime("%Y-%m-%d", time.localtime())}"')
-                # TODO обработка none
                 return None
         return task
 
@@ -149,6 +148,7 @@ class TaskManager:
         for key, value in kwargs.items():
             if value is not None and hasattr(task_to_edit, key):
                 setattr(task_to_edit, key, value)
-        self.validate_task(task_to_edit)
+        if self.validate_task(task_to_edit) is None:
+            return
         self.save_tasks()
         print('Задача изменена')
