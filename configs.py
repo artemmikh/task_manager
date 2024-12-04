@@ -2,6 +2,7 @@ import argparse
 
 
 def add_edit_arguments(parser: argparse.ArgumentParser) -> None:
+    """Добавляет аргументы для редактирования задачи."""
     parser.add_argument(
         '--id', type=int, required=True,
         help='ID задачи для редактирования'
@@ -23,6 +24,7 @@ def add_edit_arguments(parser: argparse.ArgumentParser) -> None:
 
 
 def add_list_arguments(parser: argparse.ArgumentParser) -> None:
+    """Добавляет аргументы для вывода списка задач."""
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument(
         '-a',
@@ -38,6 +40,7 @@ def add_list_arguments(parser: argparse.ArgumentParser) -> None:
 
 
 def add_task_arguments(parser: argparse.ArgumentParser) -> None:
+    """Добавляет аргументы для добавления новой задачи."""
     parser.add_argument('-t', '--title', required=True, help='Название')
     parser.add_argument('-d', '--description', required=True, help='Описание')
     parser.add_argument('-c', '--category', required=True, help='Категория')
@@ -54,6 +57,7 @@ def add_task_arguments(parser: argparse.ArgumentParser) -> None:
 
 
 def add_search_arguments(parser: argparse.ArgumentParser) -> None:
+    """Добавляет аргументы для поиска задачи."""
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('-kw', '--keyword',
                        help='Ключевое слово для поиска задачи')
@@ -62,12 +66,14 @@ def add_search_arguments(parser: argparse.ArgumentParser) -> None:
 
 
 def add_remove_arguments(parser: argparse.ArgumentParser) -> None:
+    """Добавляет аргументы для удаления задачи."""
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('--id', type=int, help='ID задачи для удаления')
     group.add_argument('--category', help='Категория задач для удаления')
 
 
 def configure_argument_parser() -> argparse.ArgumentParser:
+    """Настроить и вернуть парсер командной строки."""
     parser = argparse.ArgumentParser(description='Менеджер задач')
     subparsers = parser.add_subparsers(dest='command', required=True)
     list_parser = subparsers.add_parser('list', help='Посмотреть список задач')
