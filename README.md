@@ -56,11 +56,12 @@ python main.py <команда> [аргументы]
 | `edit`   | Редактировать задачу     | `--id`, `--title`, `--description`, `--category`, `--due_date`, `--priority`, `--status` |
 
 Пример:
+(Чтобы передать аргументы с пробелами, их нужно заключать в кавычки)
 
 ```bash
 python main.py add --title "Закончить проект" --description "Создание 
 менеджера задач" 
---category "Работа" --due_date 2024-12-06 --priority "высокий" 
+--category Работа --due_date 2024-12-06 --priority высокий
 --status "не выполнена"
 ```
 
