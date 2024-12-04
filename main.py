@@ -5,6 +5,7 @@ from task_manager import TaskManager
 
 
 def main() -> None:
+    """Основная функция для запуска программы."""
     arg_parser = configure_argument_parser()
     args: Namespace = arg_parser.parse_args()
     manager: TaskManager = TaskManager()
