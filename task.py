@@ -2,6 +2,8 @@ from typing import Dict, Union
 
 
 class Task:
+    """Представляет задачу с различными аттрибутами."""
+
     def __init__(self,
                  id: int,
                  title: str,
@@ -10,6 +12,7 @@ class Task:
                  due_date: str,
                  priority: str,
                  status: str) -> None:
+        """Инициализирует задачу с указанными аттрибутами."""
         self.id: int = id
         self.title: str = title
         self.description: str = description
@@ -19,6 +22,7 @@ class Task:
         self.status: str = status
 
     def to_dict(self) -> Dict[str, Union[int, str]]:
+        """Конвертирует задачу в словарь."""
         return {
             "id": self.id,
             "title": self.title,
