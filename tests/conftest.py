@@ -13,6 +13,8 @@ TODAY = time.strftime("%Y-%m-%d", time.localtime())
 
 @pytest.fixture
 def formatted_output() -> str:
+    """Форматирует список задач для вывода."""
+
     def formatter(tasks: List[Dict[str, Union[str, int]]]) -> str:
         return '\n'.join(
             f'id – {task["id"]}, '
@@ -30,6 +32,7 @@ def formatted_output() -> str:
 
 @pytest.fixture
 def data_no_id() -> Dict[str, str]:
+    """Возвращает данные для задачи без ID."""
     return {
         'title': 'test',
         'description': 'описание',
@@ -42,6 +45,7 @@ def data_no_id() -> Dict[str, str]:
 
 @pytest.fixture
 def data_with_id() -> List[Dict[str, Union[str, int]]]:
+    """Возвращает список задач с ID."""
     return [
         {
             'id': 1,
@@ -75,6 +79,7 @@ def data_with_id() -> List[Dict[str, Union[str, int]]]:
 
 @pytest.fixture
 def temp_db() -> str:
+    """Создает временную базу данных и возвращает её путь."""
     with NamedTemporaryFile(delete=False, suffix='.json') as tmp_file:
         yield tmp_file.name
     os.remove(tmp_file.name)
@@ -82,12 +87,14 @@ def temp_db() -> str:
 
 @pytest.fixture
 def populate_db(temp_db: str, data_with_id: List[Dict[str, str]]) -> None:
+    """Заполняет базу данных тестовыми данными."""
     with open(temp_db, 'w', encoding='utf-8') as file:
         json.dump(data_with_id, file, ensure_ascii=False, indent=2)
 
 
 @pytest.fixture
 def task_manager(monkeypatch, temp_db: str) -> TaskManager:
+    """Создает и возвращает экземпляр TaskManager с временной базой данных."""
     monkeypatch.setattr(TaskManager, 'db', temp_db)
     manager = TaskManager()
     return manager
