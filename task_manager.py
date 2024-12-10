@@ -106,21 +106,16 @@ class TaskManager:
             self.save_tasks()
             print(f'Задача добавлена. ID задачи {task.id}')
 
-    def list_task(self, all: bool = False,
-                  category: Optional[str] = None) -> None:
+    def list_task(
+            self, all: Optional[bool] = False,
+            **criteria: Optional[str]) -> None:
         """Отображает список всех задач или по категории."""
-        if not self.tasks:
+        tasks_to_show = self.tasks if all else self.get_tasks_by_criteria(
+            **criteria)
+        if not tasks_to_show:
             print('Задачи не найдены')
-        elif all:
-            print(self.get_output_format(self.tasks))
-        elif category is not None:
-            find_category = False
-            for task in self.tasks:
-                if task.category == category:
-                    print(self.get_output_format([task]))
-                    find_category = True
-            if not find_category:
-                print(f'Нет задач в категории "{category}"')
+            return
+        print(self.get_output_format(tasks_to_show))
 
     def remove_task(self, **criteria: Optional[str]) -> None:
         """Удаляет задачи по ID или категории."""
