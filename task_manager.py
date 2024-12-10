@@ -65,7 +65,8 @@ class TaskManager:
                 return None
         return task
 
-    def get_tasks_by_criteria(self, **criteria: Optional[str]) -> None:
+    def get_tasks_by_criteria(
+            self, **criteria: Optional[str]) -> Optional[List[Task]]:
         """Ищет задачи по критериям."""
         filters = {
             'keyword': lambda t, kw: kw in t.title or kw in t.description,
@@ -75,9 +76,10 @@ class TaskManager:
         }
         for key, value in criteria.items():
             if value and key in filters:
-                self.tasks = list(
+                tasks = list(
                     filter(lambda task: filters[key](task, value),
                            self.tasks))
+        return tasks
 
     def add_task(
             self,
@@ -120,28 +122,24 @@ class TaskManager:
             if not find_category:
                 print(f'Нет задач в категории "{category}"')
 
-    def remove_task(self, id: Optional[int] = None,
-                    category: Optional[str] = None) -> None:
+    def remove_task(self, **criteria: Optional[str]) -> None:
         """Удаляет задачи по ID или категории."""
-        if id is not None:
-            for task in self.tasks:
-                if task.id == id:
-                    self.tasks.remove(task)
-                    print(f'Задача с ID "{id}" удалена')
-                    break
-        elif category is not None:
-            for task in self.tasks:
-                if task.category == category:
-                    self.tasks.remove(task)
-            print(f'Все задачи с категорией "{category}" удалены')
+        tasks_to_remove: Optional[List[Task]] = self.get_tasks_by_criteria(
+            **criteria)
+        if not tasks_to_remove:
+            print('Задачи для удаления не найдены')
+            return
+        self.tasks = [task for task in self.tasks if
+                      task not in tasks_to_remove]
         self.save_tasks()
+        print('Удаление выполнено')
 
     def search_task(self, **criteria: Optional[str]) -> None:
-        self.get_tasks_by_criteria(**criteria)
-        if not self.tasks:
+        tasks = self.get_tasks_by_criteria(**criteria)
+        if not tasks:
             print('Задачи не найдены')
         else:
-            print(self.get_output_format(self.tasks))
+            print(self.get_output_format(tasks))
 
     def edit_task(self, id: int, **kwargs: Union[str, None]) -> None:
         """Редактирует задачу по ID."""
