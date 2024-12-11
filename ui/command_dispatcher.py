@@ -23,4 +23,4 @@ class CommandDispatcher:
         if manager_method:
             manager_method(**vars(args))
         else:
-            print(f"Команда {command} не поддерживается")
+            print(f'Команда {command} не поддерживается')
