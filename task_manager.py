@@ -136,15 +136,15 @@ class TaskManager:
         else:
             print(self.get_output_format(tasks))
 
-    def edit_task(self, id: int, **kwargs: Union[str, None]) -> None:
+    def edit_task(self, **criteria: Optional[str]) -> None:
         """Редактирует задачу по ID."""
-        try:
-            task_to_edit: Task = next(
-                task for task in self.tasks if task.id == id)
-        except StopIteration:
+        task_to_edit: list[Optional[Task]] = self.get_tasks_by_criteria(
+            **criteria)
+        if not task_to_edit:
             print('Задача с этим ID не найдена')
             return
-        for key, value in kwargs.items():
+        task_to_edit: Task = task_to_edit[0]
+        for key, value in criteria.items():
             if value is not None and hasattr(task_to_edit, key):
                 setattr(task_to_edit, key, value)
         if self.validate_task(task_to_edit) is None:
