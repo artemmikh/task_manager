@@ -6,7 +6,7 @@ from typing import Dict, List, Union
 
 import pytest
 
-from task_manager import TaskManager
+from services.task_manager import TaskManager
 
 TODAY = time.strftime("%Y-%m-%d", time.localtime())
 

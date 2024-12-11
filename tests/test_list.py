@@ -2,7 +2,7 @@ from typing import List, Dict, Union
 
 import pytest
 
-from task_manager import TaskManager
+from services.task_manager import TaskManager
 
 
 def test_empty_list_task(

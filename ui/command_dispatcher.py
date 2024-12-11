@@ -1,6 +1,6 @@
 from argparse import Namespace
 
-from task_manager import TaskManager
+from services.task_manager import TaskManager
 
 
 class CommandDispatcher:

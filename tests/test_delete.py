@@ -1,7 +1,7 @@
 import json
 from typing import List, Dict, Union
 
-from task_manager import TaskManager
+from services.task_manager import TaskManager
 
 
 def test_delete_task_by_id(

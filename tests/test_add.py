@@ -1,7 +1,7 @@
 import json
 from typing import Dict
 
-from task_manager import TaskManager
+from services.task_manager import TaskManager
 
 
 def test_add_task(temp_db: str, task_manager: TaskManager,

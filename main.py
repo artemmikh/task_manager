@@ -1,7 +1,7 @@
 from argparse import Namespace
 
 from ui.configs import configure_argument_parser
-from task_manager import TaskManager
+from services.task_manager import TaskManager
 from ui.command_dispatcher import CommandDispatcher
 
 

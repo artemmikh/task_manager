@@ -3,7 +3,7 @@ from typing import Dict
 
 import pytest
 
-from task_manager import TaskManager
+from services.task_manager import TaskManager
 
 
 @pytest.mark.parametrize(
