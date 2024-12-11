@@ -1,37 +1,16 @@
-import json
-import os
 import time
 from typing import List, Optional
 
 from models.task import Task
+from repository.task_repository import TaskRepository
 
 
 class TaskManager:
-    """Класс для управления задачами. Обеспечивает операции добавления,
-    редактирования, удаления, поиска и отображения задач."""
+    """Сервис для управления задачами."""
 
-    db: str = 'tasks.json'
-
-    def __init__(self) -> None:
-        """Инициализирует менеджер задач, загружая задачи из файла."""
-        self.tasks: List[Task] = self.load_tasks()
-
-    def load_tasks(self) -> List[Task]:
-        """Загружает задачи из файла базы данных."""
-        if os.path.exists(self.db):
-            with open(self.db, 'r', encoding='utf-8') as file:
-                try:
-                    return [Task(**task) for task in json.load(file)]
-                except json.JSONDecodeError:
-                    return []
-        return []
-
-    def save_tasks(self) -> None:
-        """Сохраняет текущие задачи в файл базы данных."""
-        with open(self.db, 'w', encoding='utf-8') as file:
-            json.dump([task.to_dict() for task in self.tasks], file,
-                      indent=2,
-                      ensure_ascii=False)
+    def __init__(self, repository: TaskRepository) -> None:
+        self.repository = repository
+        self.tasks: List[Task] = self.repository.load_tasks()
 
     def add_task_id(self) -> int:
         """Генерирует уникальный идентификатор для новой задачи."""
@@ -77,8 +56,7 @@ class TaskManager:
         for key, value in criteria.items():
             if value and key in filters:
                 tasks = list(
-                    filter(lambda task: filters[key](task, value),
-                           self.tasks))
+                    filter(lambda task: filters[key](task, value), self.tasks))
         return tasks
 
     def add_task(
@@ -103,12 +81,11 @@ class TaskManager:
         task = self.validate_task(task)
         if task:
             self.tasks.append(task)
-            self.save_tasks()
+            self.repository.save_tasks(self.tasks)
             print(f'Задача добавлена. ID задачи {task.id}')
 
-    def list_task(
-            self, all: Optional[bool] = False,
-            **criteria: Optional[str]) -> None:
+    def list_task(self, all: Optional[bool] = False,
+                  **criteria: Optional[str]) -> None:
         """Отображает список всех задач или по категории."""
         tasks_to_show = self.tasks if all else self.get_tasks_by_criteria(
             **criteria)
@@ -126,7 +103,7 @@ class TaskManager:
             return
         self.tasks = [task for task in self.tasks if
                       task not in tasks_to_remove]
-        self.save_tasks()
+        self.repository.save_tasks(self.tasks)
         print('Удаление выполнено')
 
     def search_task(self, **criteria: Optional[str]) -> None:
@@ -149,5 +126,5 @@ class TaskManager:
                 setattr(task_to_edit, key, value)
         if self.validate_task(task_to_edit) is None:
             return
-        self.save_tasks()
+        self.repository.save_tasks(self.tasks)
         print('Задача изменена')
