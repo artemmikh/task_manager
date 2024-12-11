@@ -1,9 +1,9 @@
 import json
 import os
 import time
-from typing import List, Optional, Union
+from typing import List, Optional
 
-from task import Task
+from models.task import Task
 
 
 class TaskManager:
