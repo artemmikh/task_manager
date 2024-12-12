@@ -6,7 +6,8 @@ from typing import Dict, List, Union
 
 import pytest
 
-from task_manager import TaskManager
+from repository.task_repository import TaskRepository
+from services.task_manager import TaskManager
 
 TODAY = time.strftime("%Y-%m-%d", time.localtime())
 
@@ -95,6 +96,7 @@ def populate_db(temp_db: str, data_with_id: List[Dict[str, str]]) -> None:
 @pytest.fixture
 def task_manager(monkeypatch, temp_db: str) -> TaskManager:
     """Создает и возвращает экземпляр TaskManager с временной базой данных."""
-    monkeypatch.setattr(TaskManager, 'db', temp_db)
-    manager = TaskManager()
+    # monkeypatch.setattr(TaskManager, 'db', temp_db)
+    repository = TaskRepository(db_path=temp_db)
+    manager = TaskManager(repository)
     return manager

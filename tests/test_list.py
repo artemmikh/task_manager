@@ -2,13 +2,13 @@ from typing import List, Dict, Union
 
 import pytest
 
-from task_manager import TaskManager
+from services.task_manager import TaskManager
 
 
 def test_empty_list_task(
         task_manager: TaskManager, capsys: pytest.CaptureFixture) -> None:
     """Тестирует вывод списка задач при их отсутствии."""
-    task_manager.list_task()
+    task_manager.list_task(all=True)
     output = capsys.readouterr()
     assert output.out.strip() == 'Задачи не найдены'
 
