@@ -3,9 +3,10 @@ from typing import List, Optional
 
 from models.task import Task
 from repository.task_repository import TaskRepository
+from services.service_interface import AbstractTaskManager
 
 
-class TaskManager:
+class TaskManager(AbstractTaskManager):
     """Сервис для управления задачами."""
 
     def __init__(self, repository: TaskRepository) -> None:

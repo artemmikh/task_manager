@@ -1,9 +1,10 @@
 from argparse import Namespace
 
 from services.task_manager import TaskManager
+from ui.ui_interface import AbstractCommandDispatcher
 
 
-class CommandDispatcher:
+class CommandDispatcher(AbstractCommandDispatcher):
     """Обрабатывает команды и вызывает соответствующие методы TaskManager."""
 
     def __init__(self, manager: TaskManager) -> None:

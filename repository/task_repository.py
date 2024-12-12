@@ -3,9 +3,10 @@ import os
 from typing import List
 
 from models.task import Task
+from repository.repository_interface import AbstractTaskRepository
 
 
-class TaskRepository:
+class TaskRepository(AbstractTaskRepository):
     """Класс для работы с базой данных задач."""
 
     def __init__(self, db_path: str = 'tasks.json') -> None:
