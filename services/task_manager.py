@@ -59,30 +59,30 @@ class TaskManager:
                     filter(lambda task: filters[key](task, value), self.tasks))
         return tasks
 
-    def add_task(
-            self,
-            title: str,
-            description: str,
-            category: str,
-            due_date: str,
-            priority: str,
-            status: str
-    ) -> None:
+    def add_task(self, **criteria) -> None:
         """Добавляет новую задачу."""
-        task = Task(
-            id=self.add_task_id(),
-            title=title,
-            description=description,
-            category=category,
-            due_date=due_date,
-            priority=priority,
-            status=status
-        )
-        task = self.validate_task(task)
+        task_id = self.add_task_id()
+        try:
+            new_task = Task(
+                id=task_id,
+                title=criteria.get('title', 'Без названия'),
+                description=criteria.get('description', 'Без описания'),
+                category=criteria.get('category', 'Общая'),
+                due_date=criteria.get(
+                    'due_date',
+                    time.strftime("%Y-%m-%d", time.localtime())),
+                priority=criteria.get('priority', 'средний'),
+                status=criteria.get('status', 'не выполнена')
+            )
+        except TypeError:
+            print(f"Ошибка создания задачи")
+            return
+
+        task = self.validate_task(new_task)
         if task:
             self.tasks.append(task)
             self.repository.save_tasks(self.tasks)
-            print(f'Задача добавлена. ID задачи {task.id}')
+            print(f'Задача добавлена. ID задачи {task_id}')
 
     def list_task(self, all: Optional[bool] = False,
                   **criteria: Optional[str]) -> None:
