@@ -76,7 +76,7 @@ class TaskManager(AbstractTaskManager):
                 status=criteria.get('status', 'не выполнена')
             )
         except TypeError:
-            print(f"Ошибка создания задачи")
+            print("Ошибка создания задачи")
             return
 
         task = self.validate_task(new_task)
