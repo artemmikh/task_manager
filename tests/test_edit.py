@@ -15,11 +15,11 @@ from services.task_manager import TaskManager
     ]
 )
 def test_edit_task(
-        edit_param: Dict[str, str],
+        edit_param: Dict[str, str], temp_db: str,
         populate_db: None, task_manager: TaskManager) -> None:
     """Тестирует изменение задачи."""
     task_manager.edit_task(**edit_param)
-    with open(task_manager.db, 'r', encoding='utf-8') as file:
+    with open(temp_db, 'r', encoding='utf-8') as file:
         tasks = json.load(file)
         updated_task = next(
             task for task in tasks if task['id'] == edit_param['id'])
